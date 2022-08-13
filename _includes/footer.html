@@ -8,11 +8,11 @@
       <div class="col-lg-8 col-md-10 mx-auto">
         <ul class="list-inline text-center">
           {% if site.bandcamp_username %}
-            <a href="https://{{ site.bandcamp_username }}.bandcamp.com/">
-              <span class="fa-stack fa-lg">
-                <i class="fa fa-headphones"></i>
-              </span>
-            </a>
+          <a href="https://{{ site.bandcamp_username }}.bandcamp.com/">
+            <span class="fa-stack fa-lg">
+              <i class="fa fa-headphones"></i>
+            </span>
+          </a>
           {% endif %}
           {% if site.email %}
           <li class="list-inline-item">
@@ -24,7 +24,14 @@
           </li>
           {% endif %}
         </ul>
-        <p class="copyright text-muted"> grassnose &copy; {{ 'now' | date: "%Y" }}</p>
+        <p class="copyright text-muted">
+          copyright &copy; grassnose {{ 'now' | date: "%Y" }}&nbsp;|&nbsp;built with
+          <a href="https://jekyllrb.com/" target="_blank" rel="noopener noreferrer">Jekyll</a>&nbsp;|&nbsp;design by
+          <a href="https://github.com/StartBootstrap/startbootstrap-clean-blog-jekyll" target="_blank"
+            rel="noopener noreferrer">
+            Start Bootstrap
+          </a>
+        </p>
       </div>
     </div>
   </div>
