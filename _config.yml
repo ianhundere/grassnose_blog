@@ -1,9 +1,9 @@
-title: Grassnose
+title: mind the process
 email: hello@grassno.se
-description: mind the process
-author: Grassnose
-baseurl: '/'
-url: 'https://github.com/ianhundere/grassnose_blog'
+description: and other creative musings
+author: grassnose
+baseurl: "/"
+url: "https://github.com/ianhundere/grassnose_blog"
 
 # Social Profiles
 bandcamp_username: grassnose
@@ -17,7 +17,7 @@ google_analytics: UA-XXXXXXXXX-X
 # Build settings
 markdown: kramdown
 paginate: 5
-paginate_path: '/posts/page:num/'
+paginate_path: "/posts/page:num/"
 plugins:
     - jekyll-feed
     - jekyll-paginate
