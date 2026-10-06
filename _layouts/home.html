@@ -1,66 +1,29 @@
 ---
 layout: default
 ---
+{% if site.description %}
+<h1 class="tagline">{{ site.description | replace: ' ', '_' }}.</h1>
+{% endif %}
 
-<!-- Page Header -->
-{% if page.background %}
-<header class="masthead" style="background-image: url('{{ page.background | prepend: site.baseurl | replace: '//', '/' }}')">
-  {% else %}
-  <header class="masthead">
-    {% endif %}
-    <div class="overlay"></div>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="page-heading">
-            <h1>{{ site.title }}</h1>
-            {% if site.description %}
-            <span class="subheading">{{ site.description }}</span>
-            {% endif %}
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
+{{ content }}
 
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-md-10 mx-auto">
-
-        {{ content }}
-
-        <!-- Home Post List -->
-        {% for post in site.posts limit : 5 %}
-
-        <article class="post-preview">
-          <a href="{{ post.url | prepend: site.baseurl | replace: '//', '/' }}">
-            <h2 class="post-title">{{ post.title }}</h2>
-            {% if post.subtitle %}
-            <h3 class="post-subtitle">{{ post.subtitle }}</h3>
-            {% else %}
-            <h3 class="post-subtitle">{{ post.excerpt | strip_html | truncatewords: 15 }}</h3>
-            {% endif %}
-          </a>
-          <p class="post-meta">Posted by
-            {% if post.author %}
-            {{ post.author }}
-            {% else %}
-            {{ site.author }}
-            {% endif %}
-            on
-            {{ post.date | date: '%B %d, %Y' }} &middot; {% include read_time.html content=post.content %}            
-          </p>
-        </article>
-
-        <hr>
-
-        {% endfor %}
-
-        <!-- Pager -->
-        <div class="clearfix">
-          <a class="btn btn-primary float-right" href="{{"/posts" | relative_url }}">View All Posts &rarr;</a>
-        </div>
-
-      </div>
-    </div>
-  </div>
+<ol class="post-grid" reversed>
+  {% for post in site.posts %}
+  {% capture num %}0{{ forloop.rindex }}{% endcapture %}
+  <li>
+    <a href="{{ post.url | relative_url }}">
+      <span class="tile">
+        <span class="tag" aria-hidden="true">gn_{{ num | slice: -2, 2 }}</span>
+        {% if post.image %}
+        {% assign thumb = post.image | replace: '/img/posts/', '/img/thumbs/' %}
+        {% assign thumb_file = site.static_files | where: 'path', thumb | first %}
+        <img src="{% if thumb_file %}{{ thumb | relative_url }}{% else %}{{ post.image | relative_url }}{% endif %}" alt="" loading="lazy" decoding="async" width="600" height="600">
+        {% endif %}
+      </span>
+      <span class="card-title">{{ post.title }}</span>
+      {% if post.subtitle %}<span class="card-subtitle">{{ post.subtitle }}</span>{% endif %}
+      <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: "%Y/%m/%d" }}</time>
+    </a>
+  </li>
+  {% endfor %}
+</ol>

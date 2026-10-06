@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+"""Make small square home-page tiles for each post's cover image.
+
+Reads `image:` from the front matter of every file in _posts/ and writes a
+centre-cropped 600x600 JPEG to img/thumbs/ with the same file name. The home
+page uses the thumb when it exists and falls back to the full image when it
+doesn't, so forgetting to run this never breaks the site.
+
+Run after adding or changing a post's image:
+
+    python3 bin/thumbs
+
+Needs Pillow (pip install pillow). Skips thumbs that are newer than their source.
+"""
+import pathlib
+import re
+import sys
+
+try:
+    from PIL import Image, ImageOps
+except ImportError:
+    sys.exit("bin/thumbs needs Pillow: pip install pillow")
+
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+OUT = ROOT / "img" / "thumbs"
+SHORT_SIDE = 600
+IMAGE_KEY = re.compile(r"^image:\s*['\"]?(/img/posts/[^'\"\s]+)", re.M)
+
+
+def main() -> None:
+    OUT.mkdir(parents=True, exist_ok=True)
+    made = skipped = 0
+    for post in sorted((ROOT / "_posts").glob("*")):
+        match = IMAGE_KEY.search(post.read_text(encoding="utf-8"))
+        if not match:
+            continue
+        src = ROOT / match.group(1).lstrip("/")
+        dst = OUT / src.name
+        if not src.exists():
+            print(f"missing source for {post.name}: {src}", file=sys.stderr)
+            continue
+        if dst.exists() and dst.stat().st_mtime >= src.stat().st_mtime:
+            skipped += 1
+            continue
+        with Image.open(src) as im:
+            im = ImageOps.exif_transpose(im).convert("RGB")
+            # tiles are square and centre-cropped (object-fit: cover), so crop here too
+            side = min(SHORT_SIDE, *im.size)
+            im = ImageOps.fit(im, (side, side), Image.LANCZOS)
+            im.save(dst, "JPEG", quality=80, optimize=True, progressive=True)
+        made += 1
+        print(f"{dst.relative_to(ROOT)}  {dst.stat().st_size // 1024}KB")
+    print(f"{made} written, {skipped} up to date")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,72 +1,25 @@
 ---
 layout: default
 ---
+<article class="post">
+  <header class="post-header">
+    <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: "%Y/%m/%d" }}</time>
+    <h1>{{ page.title }}</h1>
+    {% if page.subtitle %}<p class="subtitle">{{ page.subtitle }}</p>{% endif %}
+  </header>
 
-<!-- Page Header -->
-{% if page.background %}
-<header
-    class="masthead"
-    style="background-image: url('{{ page.background | prepend: site.baseurl | replace: '//', '/' }}')"
->
-    {% else %}
-    <header class="masthead">
-        {% endif %}
-        <div class="overlay"></div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-md-10 mx-auto">
-                    <div class="post-heading">
-                        <h1>{{ page.title }}</h1>
-                        {% if page.subtitle %}
-                        <h2 class="subheading">{{ page.subtitle }}</h2>
-                        {% endif %}
-                        <span class="meta"
-                            >posted by
-                            <a href="#"
-                                >{% if page.author %}{{ page.author }}{% else
-                                %}{{ site.author }}{% endif %}</a
-                            >
-                            on {{ page.date | date: '%B %d, %Y' }} &middot; {%
-                            include read_time.html content=page.content %}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
+  {% if page.image %}
+  <div class="tile cover"><img src="{{ page.image | relative_url }}" alt=""></div>
+  {% endif %}
 
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto">
-                {{ content }}
+  {{ content }}
+</article>
 
-                <hr />
-
-                <div class="clearfix">
-                    {% if page.previous.url %}
-                    <a
-                        class="btn btn-primary float-left"
-                        href="{{ page.previous.url | prepend: site.baseurl | replace: '//', '/' }}"
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="{{ page.previous.title }}"
-                        >&larr; Previous<span class="d-none d-md-inline">
-                            Post</span
-                        ></a
-                    >
-                    {% endif %} {% if page.next.url %}
-                    <a
-                        class="btn btn-primary float-right"
-                        href="{{ page.next.url | prepend: site.baseurl | replace: '//', '/' }}"
-                        data-toggle="tooltip"
-                        data-placement="top"
-                        title="{{ page.next.title }}"
-                        >Next<span class="d-none d-md-inline"> Post</span>
-                        &rarr;</a
-                    >
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
+<nav class="post-nav" aria-label="more posts">
+  {% if page.previous.url %}
+  <a href="{{ page.previous.url | relative_url }}"><small>&larr;_older</small>{{ page.previous.title }}</a>
+  {% endif %}
+  {% if page.next.url %}
+  <a class="post-nav-next" href="{{ page.next.url | relative_url }}"><small>newer_&rarr;</small>{{ page.next.title }}</a>
+  {% endif %}
+</nav>
